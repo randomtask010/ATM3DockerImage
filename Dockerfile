@@ -12,8 +12,9 @@ RUN apk update && apk add curl bash
 # Download and unzip minecraft files
 RUN mkdir -p /minecraft/world
 
-RUN curl -LO https://media.forgecdn.net/files/2756/981/ATM3-5.12.3_Server-FULL.zip 
-RUN unzip ATM3-5.12.3_Server-FULL.zip
+RUN curl -LO https://addons-origin.cursecdn.com/files/2510/629/Server%20Files.zip
+RUN unzip All+the+Mods+3-v5.12.3.zip && mv ATM3/* ./
+RUN rmdir ATM3 && rm All+the+Mods+3-v5.12.3.zip
 
 
 # Accept EULA
