@@ -1,25 +1,34 @@
 FROM openjdk:alpine
-MAINTAINER Stefan Urban <stefan.urban@live.de>
+MAINTAINER Joel Collins <joel@jtcollins.net>
 
 USER root
 WORKDIR /minecraft
 
-VOLUME ["/minecraft/world"]
+VOLUME /minecraft/world
+VOLUME /minecraft/settings
+
 EXPOSE 25565
 
 RUN apk update && apk add curl bash
 
 # Download and unzip minecraft files
+RUN mkdir -p /minecraft/settings
 RUN mkdir -p /minecraft/world
 
-RUN curl -LO https://addons-origin.cursecdn.com/files/2510/629/Server%20Files.zip
-RUN unzip All+the+Mods+3-v5.12.3.zip && mv ATM3/* ./
-RUN rmdir ATM3 && rm All+the+Mods+3-v5.12.3.zip
-
+RUN wget https://media.forgecdn.net/files/2756/981/ATM3-5.12.3_Server-FULL.zip -O server_files.zip
+RUN unzip server_files.zip
+RUN rm server_files.zip
 
 # Accept EULA
 RUN echo "# EULA accepted on $(date)" > /minecraft/eula.txt && \
     echo "eula=TRUE" >> eula.txt
 
+# Fix borked settings.cfg by sticking a semi-colon at the end of each line 
+#
+#RUN sed -i "s/$/;/g" settings.cfg
+
 # Startup script
-CMD ["/bin/bash", "/minecraft/ServerStart.sh"] 
+COPY start.sh /minecraft/
+RUN chmod +x /minecraft/*.sh
+
+CMD ["/bin/bash", "/minecraft/start.sh"]
