@@ -21,7 +21,7 @@ RUN rm server_files.zip
 
 # Accept EULA
 RUN echo "# EULA accepted on $(date)" > /minecraft/eula.txt && \
-    echo "eula=TRUE" >> eula.txt
+    echo "eula=true" >> eula.txt
 
 # Fix borked settings.cfg by sticking a semi-colon at the end of each line 
 #
